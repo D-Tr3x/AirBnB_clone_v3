@@ -4,8 +4,8 @@ Contains the class DBStorage
 """
 
 import models
-from models.amenity import Amenity
 from models.base_model import BaseModel, Base
+from models.amenity import Amenity
 from models.city import City
 from models.place import Place
 from models.review import Review
@@ -51,6 +51,27 @@ class DBStorage:
                     new_dict[key] = obj
         return (new_dict)
 
+    def get(self, cls, id):
+        """ Retrieves one object based on class and its ID
+
+        Returns:
+            The object if found, otherwise None
+        """
+        if cls and id:
+            key = f"{cls.__name__}.{id}"
+            objects = self.all(cls)
+            return objects.get(key)
+        return None
+
+    def count(self, cls=None):
+        """ Counts the number of objects in storage
+
+        Returns:
+            The count of the objects matching the given class,
+            or all objects if None
+        """
+        return len(self.all(cls))
+
     def new(self, obj):
         """add the object to the current database session"""
         self.__session.add(obj)
@@ -63,6 +84,12 @@ class DBStorage:
         """delete from the current database session obj if not None"""
         if obj is not None:
             self.__session.delete(obj)
+            self.save()
+
+    def delete_all(self):
+        """ """
+        self.__objects = {}
+        self.save()
 
     def reload(self):
         """reloads data from the database"""
@@ -74,3 +101,7 @@ class DBStorage:
     def close(self):
         """call remove() method on the private session attribute"""
         self.__session.remove()
+
+
+db_storage = DBStorage()
+db_storage.reload()
