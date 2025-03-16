@@ -21,7 +21,7 @@ classes = {"Amenity": Amenity, "City": City,
 
 
 class DBStorage:
-    """interaacts with the MySQL database"""
+    """interacts with the MySQL database"""
     __engine = None
     __session = None
 
@@ -87,7 +87,7 @@ class DBStorage:
             self.save()
 
     def delete_all(self):
-        """ """
+        """ Deletes all objects from __objects """
         self.__objects = {}
         self.save()
 
