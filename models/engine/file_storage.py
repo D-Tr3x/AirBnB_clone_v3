@@ -40,6 +40,27 @@ class FileStorage:
             key = obj.__class__.__name__ + "." + obj.id
             self.__objects[key] = obj
 
+    def get(self, cls, id):
+        """ Retrieves one object based on class and its ID
+
+        Returns:
+            The object if found, otherwise None
+        """
+        if cls and id:
+            get_obj = f"{cls.__name__}.{id}"
+            objects = self.all(cls)
+            return objects.get(get_obj)
+        return None
+
+    def count(self, cls=None):
+        """ Counts the number of objects in storage
+
+        Returns:
+            The count of the objects matching the given class,
+            or all objects if None
+        """
+        return len(self.all(cls))
+
     def save(self):
         """serializes __objects to the JSON file (path: __file_path)"""
         json_objects = {}
@@ -65,6 +86,15 @@ class FileStorage:
             if key in self.__objects:
                 del self.__objects[key]
 
+    def delete_all(self):
+        """Delete all objects from __objects"""
+        self.__objects = {}
+        self.save()
+
     def close(self):
         """call reload() method for deserializing the JSON file to objects"""
         self.reload()
+
+
+file_storage = FileStorage()
+file_storage.reload()
