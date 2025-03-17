@@ -58,7 +58,7 @@ class DBStorage:
             The object if found, otherwise None
         """
         if cls and id:
-            key = f"{cls.__name__}.{id}"
+            key = "{}.{}".format(cls.__name__, id)
             objects = self.all(cls)
             return objects.get(key)
         return None

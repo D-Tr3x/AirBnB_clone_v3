@@ -47,7 +47,7 @@ class FileStorage:
             The object if found, otherwise None
         """
         if cls and id:
-            get_obj = f"{cls.__name__}.{id}"
+            get_obj = "{}.{}".format(cls.__name__, id)
             objects = self.all(cls)
             return objects.get(get_obj)
         return None
