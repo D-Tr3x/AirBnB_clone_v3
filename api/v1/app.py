@@ -4,7 +4,7 @@ This module starts a Flask web application.
 
 The application registers the `app_views` blueprint,
 sets up the teardown method for closing the storage session,
-and runs the Flask server using environment variables for configuration
+and runs the Flask server using environment variables for configuration.
 """
 
 
@@ -20,16 +20,12 @@ app.register_blueprint(app_views)
 
 @app.teardown_appcontext
 def teardown_db(exception):
-    """
-    Closes storage after each request
-    """
+    """Close storage after each request."""
     storage.close()
 
 
 if __name__ == "__main__":
-    """
-    Runs the Flask application
-    """
+    """Runs the Flask application."""
     host = os.getenv("HBNB_API_HOST", "0.0.0.0")
     port = int(os.getenv("HBNB_API_PORT", "5000"))
     app.run(host=host, port=port, threaded=True)
