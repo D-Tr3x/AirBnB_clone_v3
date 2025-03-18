@@ -84,7 +84,7 @@ def cities_with_id(city_id=None):
         if not request.is_json:
             return make_response(jsonify({"error": "Not a JSON"}), 400)
         json_data = request.get_json(silent=True)
-        if not json_data :
+        if not json_data:
             return make_response(jsonify({"error": "Not a JSON"}), 400)
 
         for key, value in json_data.items():
@@ -97,4 +97,3 @@ def cities_with_id(city_id=None):
         storage.delete(city)
         storage.save()
         return jsonify({}), 200
-
