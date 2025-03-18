@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-"""Implements all default RESTful API actions for State."""
+"""Implements all default RESTful API actions for City objects."""
 from api.v1.views import app_views
 from flask import abort, jsonify, make_response, request
 from models import storage
