@@ -7,7 +7,8 @@ from models.state import State
 from models.city import City
 
 
-@app_views.route('/states/<state_id>/cities', methods=['GET', 'POST'], strict_slashes=False)
+@app_views.route('/states/<state_id>/cities', methods=['GET', 'POST'],
+                 strict_slashes=False)
 def cities_by_state(state_id):
     """
     Handle requests for City objects associated with a specific State.
@@ -17,8 +18,10 @@ def cities_by_state(state_id):
         - If the state_id is not linked to any State, raises a 404 error.
     POST:
         - Creates a new City for the given state.
-        - Expects a JSON body; if invalid, raises a 400 error with "Not a JSON".
-        - If the JSON body does not contain the key "name", raises a 400 error with "Missing name".
+        - Expects a JSON body; if invalid,
+          raises a 400 error with "Not a JSON".
+        - If the JSON body does not contain the key "name",
+          raises a 400 error with "Missing name".
         - Returns the new City object in JSON format with status 201.
     """
     state = storage.get(State, state_id)
