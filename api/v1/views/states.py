@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """Implements all default RESTful API actions for State."""
 from api.v1.views import app_views
-from flask import abort, jsonify, request
+from flask import abort, jsonify, make_response, request
 from models import storage
 from models.state import State
 
@@ -23,11 +23,14 @@ def states_no_id():
         return jsonify(states_list)
 
     if request.method == 'POST':
-        json_data = request.get_json()
+        try:
+            json_data = request.get_json(force=True)
+        except Exception:
+            return make_response(jsonify({"error": "Not a JSON"}), 400)
         if json_data is None:
-            abort(400, 'Not a JSON')
+            return make_response(jsonify({"error": "Not a JSON"}), 400)
         if json_data.get("name") is None:
-            abort(400, 'Missing name')
+            return make_response(jsonify({"error": "Missing name"}), 400)
         new_state = State(**json_data)
         storage.new(new_state)
         storage.save()
@@ -59,15 +62,17 @@ def states_with_id(state_id=None):
         return jsonify(state.to_dict())
 
     if request.method == 'PUT':
-        json_data = request.get_json()
+        try:
+            json_data = request.get_json()
+        except Exception:
+            return make_response(jsonify({"error": "Not a JSON"}), 400)
         if json_data is None:
-            abort(400, 'Not a JSON')
-
+            return make_response(jsonify({"error": "Not a JSON"}), 400)
         for key, value in json_data.items():
             if key not in ['id', 'created_at', 'updated_at']:
                 setattr(state, key, value)
         storage.save()
-        return jsonify(state.to_dict())
+        return jsonify(state.to_dict()), 200
 
     if request.method == 'DELETE':
         storage.delete(state)
